@@ -8,7 +8,7 @@ Installation
 - Access the app folder and run:
 	- composer install
 - Create a copy of the file settings.json.dist using the name settings.json
-- Add the urls and credentials following the instructions.
+- Edit your settings.json file and add the urls and credentials following the instructions.
 - That is it =)
 
 
