@@ -1,0 +1,6 @@
+{
+  "dashboardLoginURL" : "LOGIN_URL_HERE",
+  "dashboardSitesURL" : "DASHBOARD_URL_HERE - Do not paste Query String parameters like '?page=4'",
+  "accountUsermame" : "YOUR_USERNAME",
+  "accountPassword" : "YOUR_PASSWORD_BASE64_ENCODED - You can use this url to encode it: https://www.base64encode.org/"
+}

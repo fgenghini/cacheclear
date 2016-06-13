@@ -16,34 +16,51 @@ class CacheClear {
   private $client;
 
   // Dashboard Login URL.
-  private $dashboardLoginURL = 'LOGIN_URL_HERE';
+  private $dashboardLoginURL;
 
   // Dashboard url.
-  // The pagination queryString (page) should be present in this url,
-  // so you shoud append ?page= in the end its end
-  private $dashboardSitesURL = 'DASHBOARD_URL_HERE' . '?page=';
+  private $dashboardSitesURL;
 
+  private $accountUsermame;
 
-  // ***************************************
-  // ***************************************
-  // *********      WARNING     ************
-  // ***************************************
-  // ***************************************
-  //
-  //  Your credentials.
-  //  If you share this script, remember to remove the info below.
-  private $accountUsermame = 'YOUR_USERNAME';
-
-  //  Your password should be base64 encoded
-  //  You can use this url to encode it: https://www.base64encode.org/
-  private $accountPassword = 'YOUR_PASSWORD_BASE64_ENCODED';
+  private $accountPassword;
 
 
   /**
    * Class Constructor.
    */
   public function __construct() {
+
     $this->client = new Client();
+
+    if (!file_exists('settings.json')) {
+      $this->headerLog('File settings.json not found.');
+      die;
+    }
+
+    $settings = json_decode(file_get_contents('settings.json'));
+
+    if (!$this->settingsExists($settings)) {
+      $this->headerLog('settings.json file not configured properly.');
+      die;
+    }
+
+    $this->dashboardLoginURL = $settings->dashboardLoginURL;
+    $this->dashboardSitesURL = $settings->dashboardSitesURL . '?page=';
+    $this->accountUsermame = $settings->accountUsermame;
+    $this->accountPassword = $settings->accountPassword;
+  }
+
+
+  /**
+   * Chech if all the settings are configured.
+   */
+  private function settingsExists($settings) {
+    if (empty($settings->dashboardLoginURL) || empty($settings->dashboardSitesURL) || empty($settings->accountUsermame) || empty($settings->accountPassword)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 
@@ -128,4 +145,4 @@ class CacheClear {
  * ================
  */
 $crawler = new CacheClear();
-$crawler->clearCaches(1, 10);
+$crawler->clearCaches(1,10);
