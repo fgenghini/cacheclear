@@ -36,7 +36,7 @@ class CacheClear {
 
   //  Your password should be base64 encoded
   //  You can use this url to encode it: https://www.base64encode.org/
-  private $accountPassword = 'YOUR_PASSWORD_BASE_ENCODED';
+  private $accountPassword = 'YOUR_PASSWORD_BASE64_ENCODED';
 
 
   /**

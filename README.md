@@ -1,17 +1,17 @@
 Requirements
-============
+------------
 - You need to have composer installed.
 
 
 Installation
-==============
+------------
 - Access the app folder and run:
 	- composer install
 - That is it =)
 
 
 Usage
-=====
+-----
 - Edit cacheclear.php file
 - Add the page or pages that you want to clear the caches in the end of the file.
 - You can you use:
