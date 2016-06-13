@@ -13,6 +13,7 @@ Installation
 Usage
 -----
 - Edit cacheclear.php file
+- Add the required urls and your credentials.
 - Add the page or pages that you want to clear the caches in the end of the file.
 - You can you use:
 	- $crawler->clearCaches(12); = Clear the caches for all the sites on page 12)
