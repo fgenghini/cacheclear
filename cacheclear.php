@@ -136,6 +136,67 @@ class CacheClear {
     }
   }
 
+
+  /**
+   * Clear pages waiting a given interval.
+   *
+   * @param  integer $totalPages
+   *   Total pages on Dashboard.
+   *
+   * @param  array $pagesToStop
+   *   Pages where the crawler should wait.
+   *
+   * @param  integer $intervalMinutes
+   *   Interval in minutes that the crawler will wait in the given pages.
+   *
+   * Example:
+   *   clearCachesInterval($totalPages = 40, $pagesToStop = array(10, 20, 30), $intervalMinutes = 5)
+   *   Will go through the 40 pages stopping on pages 10, 20 and 30 and waiting 5 minutes.
+   */
+  public function clearCachesInterval($totalPages = 1, $pagesToStop = array(), $intervalMinutes = 0) {
+
+    // Try to remove the max_execution_time limit.
+    $setPHPExecutionTime = set_time_limit(0);
+
+    if (!$setPHPExecutionTime) {
+      $this->headerLog('Unable to change max_execution_time PHP setting. You may need to edit your php.ini file and set it manually.');
+      die;
+    }
+
+    // Interval in seconds to be used in sleep function.
+    $sleepTime = $intervalMinutes * 60;
+
+    $this->login();
+
+    $this->headerLog('Starting Clear Caches');
+
+    for ($i=0; $i < $totalPages; $i++) {
+
+      if (in_array(($i + 1), $pagesToStop)) {
+        $this->log("Script will now wait $intervalMinutes minute(s).\n");
+        sleep($sleepTime);
+      }
+
+      $this->headerLog('Clear Cache Page ' . ($i + 1));
+
+      $dashboardURL = $this->dashboardSitesURL . $i;
+
+      $crawler = $this->client->request('GET', $dashboardURL);
+
+      $crawler->filter('a.clear-caches')->each(function ($node) {
+        $clearCacheForm = $this->client->click($node->link());
+
+        $form = $clearCacheForm->selectButton('Clear caches')->form();
+
+        $this->log($clearCacheForm->filter('.title-bar h1')->text());
+
+        $dashboardPage = $this->client->submit($form);
+
+        $this->log($dashboardPage->filter('.messages.status')->text() . "\n");
+      });
+    }
+  }
+
 }
 
 
@@ -145,4 +206,5 @@ class CacheClear {
  * ================
  */
 $crawler = new CacheClear();
-$crawler->clearCaches(1,10);
+//$crawler->clearCaches(1,10);
+//$crawler->clearCachesInterval(3, array(2), 1);
